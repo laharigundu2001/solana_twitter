@@ -13,7 +13,7 @@ describe("solana-twitter", () => {
   it('can send a new tweet', async () => {
     // Call the "SendTweet" instruction.
     const tweet = anchor.web3.Keypair.generate();
-    await program.rpc.sendTweet('BTS', 'ARMY loves BTS', {
+    await program.rpc.sendTweet('bts', 'ARMY loves BTS', {
       accounts: {
         tweet: tweet.publicKey,
         author: program.provider.wallet.publicKey,
@@ -27,7 +27,7 @@ describe("solana-twitter", () => {
 
     // Ensure it has the right data.
     assert.equal(tweetAccount.author.toBase58(), program.provider.wallet.publicKey.toBase58());
-    assert.equal(tweetAccount.topic, 'BTS');
+    assert.equal(tweetAccount.topic, 'bts');
     assert.equal(tweetAccount.content, 'ARMY loves BTS');
     assert.ok(tweetAccount.timestamp);
   });
@@ -62,7 +62,7 @@ describe("solana-twitter", () => {
 
     // Call the "SendTweet" instruction on behalf of this other user.
     const tweet = anchor.web3.Keypair.generate();
-    await program.rpc.sendTweet('J.K.Rowling', 'Harry Potter and the Prisoner of Azkaban', {
+    await program.rpc.sendTweet('jkrowling', 'Harry Potter and the Prisoner of Azkaban', {
       accounts: {
         tweet: tweet.publicKey,
         author: otherUser.publicKey,
@@ -76,7 +76,7 @@ describe("solana-twitter", () => {
 
     // Ensure it has the right data.
     assert.equal(tweetAccount.author.toBase58(), otherUser.publicKey.toBase58());
-    assert.equal(tweetAccount.topic, 'J.K.Rowling');
+    assert.equal(tweetAccount.topic, 'jkrowling');
     assert.equal(tweetAccount.content, 'Harry Potter and the Prisoner of Azkaban');
     assert.ok(tweetAccount.timestamp);
   });
@@ -131,14 +131,14 @@ describe("solana-twitter", () => {
             32 + // Author public key.
             8 + // Timestamp.
             4, // Topic string prefix.
-          bytes: bs58.encode(Buffer.from('J.K.Rowling')),
+          bytes: bs58.encode(Buffer.from('jkrowling')),
         }
       }
     ]);
 
     assert.equal(tweetAccounts.length, 1);
     assert.ok(tweetAccounts.every(tweetAccount => {
-      return tweetAccount.account.topic === 'J.K.Rowling'
+      return tweetAccount.account.topic === 'jkrowling'
     }))
   });
 });
